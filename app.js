@@ -18,9 +18,8 @@ const mime = require('mime-types')
 const fs = require('fs')
 
 //const downloadFolder = path.join(__dirname, 'downloads')
-const downloadDir = path.join(__dirname, 'downloads');
+const downloadDir = path.join(__dirname, '/public/downloads');
 
-app.use('/pu')
 app.use('/public', express.static(__dirname + '/public'))
 
 app.engine('hbs', exphbs.engine({
@@ -68,7 +67,7 @@ app.get('/download', (req, res)=>{
 		}
 	
 		// Renderiza o arquivo index.handlebars e passa os nomes dos arquivos
-		res.render('index', { files: files })
+		res.render('download', { files: files })
 	  })
 	})
 	
