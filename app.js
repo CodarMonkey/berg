@@ -13,8 +13,14 @@ console.log('servidor rodando');*/
 const express = require('express')
 const exphbs = require('express-handlebars')
 const app = express()
+const path = require('path')
+const mime = require('mime-types')
+const fs = require('fs')
 
+//const downloadFolder = path.join(__dirname, 'downloads')
+const downloadDir = path.join(__dirname, 'downloads');
 
+app.use('/pu')
 app.use('/public', express.static(__dirname + '/public'))
 
 app.engine('hbs', exphbs.engine({
@@ -24,6 +30,7 @@ app.engine('hbs', exphbs.engine({
 }))
 app.set('view engine', 'hbs') 
 //app.set("views", "./views");
+
 
 
 
@@ -49,10 +56,44 @@ app.get('/serviso', (req, res)=>{
 })
 
 app.get('/dash', (req, res)=>{
+	res.render('')
 	//res.sendFile(__dirname+'/view/site/dash.html')
 })
 
+app.get('/download', (req, res)=>{
+	fs.readdir(downloadDir, (err, files) => {
+		if (err) {
+		  console.error(err)
+		  return res.status(500).send('Erro ao listar arquivos para download')
+		}
+	
+		// Renderiza o arquivo index.handlebars e passa os nomes dos arquivos
+		res.render('index', { files: files })
+	  })
+	})
+	
+	// Rota para fazer o download do arquivo
+	app.get('/download/:filename', (req, res) => {
+	  const file = path.join(downloadDir, req.params.filename)
+	
+	  // Verifica se o arquivo existe
+	  if (fs.existsSync(file)) {
+		// Define o cabeçalho para download
+		res.setHeader('Content-disposition', 'attachment; filename=' + req.params.filename)
+		res.setHeader('Content-type', 'application/octet-stream')
+	
+		// Cria o fluxo de leitura do arquivo e o envia para o cliente
+		const fileStream = fs.createReadStream(file)
+		fileStream.pipe(res)
+	  } else {
+		return res.status(404).send('Arquivo não encontrado')
+	  }
+	})
 
+app.get('/contato', (req, res)=>{
+	res.render('contato')
+	//res.sendFile(__dirname+'/view/site/dash.html')
+})
 
 
 app.listen(8888,function(){
