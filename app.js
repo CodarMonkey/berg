@@ -1,11 +1,4 @@
 
-/*var http = require('http')
-
-http.createServer(function(req, res){
-	res.end('ola')
-}).listen(8888);
-	
-console.log('servidor rodando');*/
 
 
 
@@ -17,20 +10,15 @@ const path = require('path')
 const mime = require('mime-types')
 const fs = require('fs')
 
-//const downloadFolder = path.join(__dirname, 'downloads')
+
 const downloadDir = path.join(__dirname, '/public/downloads');
 
+// Configuração do Handlebars
+app.engine('.hbs', exphbs.engine({extname: '.hbs'}))
+app.set('view engine', '.hbs')
+
+// Define o diretório público para arquivos estáticos (CSS, JS, imagens, etc.)
 app.use('/public', express.static(__dirname + '/public'))
-
-app.engine('hbs', exphbs.engine({
-	//layoutsDir: 'views/layouts/',
-    //defaultLayout: null,
-    extname: '.hbs'
-}))
-app.set('view engine', 'hbs') 
-//app.set("views", "./views");
-
-
 
 
 
@@ -54,10 +42,12 @@ app.get('/serviso', (req, res)=>{
 	//res.sendFile(__dirname+'/view/site/serviso.html')
 })
 
+
 app.get('/dash', (req, res)=>{
-	res.render('')
+	res.render('dash')
 	//res.sendFile(__dirname+'/view/site/dash.html')
 })
+
 
 app.get('/download', (req, res)=>{
 	fs.readdir(downloadDir, (err, files) => {
@@ -88,6 +78,7 @@ app.get('/download', (req, res)=>{
 		return res.status(404).send('Arquivo não encontrado')
 	  }
 	})
+
 
 app.get('/contato', (req, res)=>{
 	res.render('contato')

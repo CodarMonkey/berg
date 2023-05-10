@@ -9,8 +9,11 @@
   "author": "monkey",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^5.2.3",
     "express": "^4.18.2",
     "express-handlebars": "^7.0.7",
+    "fs": "^0.0.1-security",
+    "mime-types": "^2.1.35",
     "nodemon": "^2.0.22"
   }
 }
